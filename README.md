@@ -254,6 +254,7 @@ xml=%3C%21DOCTYPE%20test%20%5B%3C%21ENTITY%20xxe%20SYSTEM%20%22file%3A%2f%2f%2fe
 
 # sql injection 101
 ```
+admin' or '1'='1--
 admin' --
 admin' #
 admin'/*
